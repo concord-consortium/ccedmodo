@@ -6,12 +6,12 @@ get '/' do
 end
 
 post '/install' do
-  install = JSON.parse params['install']
+  install = JSON.parse params[:install], :symbolize_names => true
   logger.info "Install request received"
-  logger.info "  install key: #{install['install_key']}"
-  logger.info "  user token: #{install['user_token']}"
+  logger.info "  install key: #{install[:install_key]}"
+  logger.info "  user token: #{install[:user_token]}"
   logger.info "  groups:"
-  install['groups'].each do |group|
+  install[:groups].each do |group|
   	logger.info "    " + group
   end
 
