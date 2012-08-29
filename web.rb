@@ -2,7 +2,7 @@ require 'sinatra'
 require 'json'
 require 'rest_client'
 
-api = {
+set :api, {
   :prefix => "https://appsapi.edmodobox.com/",
   :version => "v1",
   :key => "***REMOVED***"
@@ -38,9 +38,16 @@ end
 
 
 helpers do
-  def launch_key_valid?(launch_key) 
-    response = RestClient.get "#{api[:prefix]}/#{api[:version]}/launchRequests", 
-      {:params => {:api_key => api[:key], :launch_key => launch_key}}
+  def launch_key_valid?(launch_key)
+    api = settings.api
+    logger.info "using api: #{api[:prefix]}"
+
+    begin
+      response = RestClient.get "#{api[:prefix]}/#{api[:version]}/launchRequests", 
+        {:params => {:api_key => api[:key], :launch_key => launch_key}}
+    rescue => e
+      return false
+    end
 
     logger.info "launch request response:"
     logger.info response.to_str
