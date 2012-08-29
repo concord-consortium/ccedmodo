@@ -1,5 +1,12 @@
 require 'sinatra'
 require 'json'
+require 'rest_client'
+
+api = {
+  :prefix => "https://appsapi.edmodobox.com/",
+  :version => "v1",
+  :key => "***REMOVED***"
+}
 
 get '/' do
   "Hello, world"
@@ -21,5 +28,22 @@ end
 
 
 post '/app' do
-  halt 401, 'You are not authorized.'
+  launch_key = params[:launch_key]
+  if launch_key_valid?(launch_key)
+    haml :index
+  else
+    halt 401, 'You are not authorized.'
+  end
+end
+
+
+helpers do
+  def launch_key_valid?(launch_key) 
+    response = RestClient.get "#{api[:prefix]}/#{api[:version]}/launchRequests", 
+      {:params => {:api_key => api[:key], :launch_key => launch_key}}
+
+    logger.info "launch request response:"
+    logger.info response.to_str
+    response.code == 200
+  end
 end
