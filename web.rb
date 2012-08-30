@@ -29,11 +29,11 @@ end
 
 post '/app' do
   launch_key = params[:launch_key]
-  #if launch_key_valid?(launch_key)
+  if launch_key_valid?(launch_key)
     haml :index
-  # else
-  #   halt 401, 'You are not authorized.'
-  # end
+  else
+    halt 401, 'You are not authorized.'
+  end
 end
 
 
