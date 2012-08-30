@@ -74,7 +74,7 @@ post '/app/library' do
   response = RestClient.post "#{api[:prefix]}/#{api[:version]}/addToLibrary",
     {:api_key => api[:key], :user_token => user_token, :resource => resource}
 
-  redirect to('/app')
+  redirect to("/app?interactive=#{interactive}")
 end
 
 
