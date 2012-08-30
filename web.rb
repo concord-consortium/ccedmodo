@@ -60,7 +60,7 @@ helpers do
       logger.info "about to GET the launchRequests resource"
       # not sure how to get access to the logger outside of request scope
       RestClient.log = logger
-      response = RestClient.get "#{api[:prefix]}/#{api[:version]}/launchRequests", 
+      response = RestClient.get "#{api[:prefix]}/#{api[:version]}/launchRequests",
         {:params => {:api_key => api[:key], :launch_key => launch_key}}
     rescue => e
       logger.info "error response: "
@@ -75,7 +75,7 @@ helpers do
     session[:launch_info] = JSON.parse response, :symbolize_names => true
   end
 
-  def user_name 
+  def user_name
     launch_info = session[:launch_info]
     launch_info[:first_name] + " " + launch_info[:last_name]
   end
