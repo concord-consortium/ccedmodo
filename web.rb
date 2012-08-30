@@ -4,7 +4,7 @@ require 'rest_client'
 require 'logger'
 
 set :api, {
-  :prefix => "https://appsapi.edmodobox.com/",
+  :prefix => "https://appsapi.edmodobox.com",
   :version => "v1",
   :key => "***REMOVED***"
 }
