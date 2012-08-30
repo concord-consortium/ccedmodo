@@ -68,7 +68,7 @@ post '/app/library' do
 
   RestClient.log = logger
   response = RestClient.post "#{api[:prefix]}/#{api[:version]}/addToLibrary",
-    {:params => {:api_key => api[:key], :user_token => user_token, :resource => resource}}
+    {:api_key => api[:key], :user_token => user_token, :resource => resource}
 
   redirect to('/app')
 end
