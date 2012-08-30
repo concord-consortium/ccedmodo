@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'json'
 require 'rest_client'
+require 'haml'
 
 set :api, {
   :prefix => "https://appsapi.edmodobox.com",
