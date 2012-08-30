@@ -61,18 +61,27 @@ post '/app/library' do
   api = settings.api
   interactive = params[:interactive] || halt(400)
 
-  logger.info "Authorized? #{session[:authorized]}"
-  resource = {
-    :type => 'link',
-    :title => interactive,
-    :url => "app://?interactive=#{interactive}",
-    :description => 'Next Gen MW Interactive',
-    :thumb_url => 'http://ccedmodo.herokuapp.com/logo.png'
-  }.to_json
-
   RestClient.log = logger
   response = RestClient.post "#{api[:prefix]}/#{api[:version]}/addToLibrary",
-    {:api_key => api[:key], :user_token => user_token, :resource => resource}
+    {:api_key => api[:key], :user_token => user_token, :resource => app_link(interactive).to_json}
+
+  redirect to("/app?interactive=#{interactive}")
+end
+
+
+post '/app/assignment' do
+  assignment_id = params[:assignment_id] || halt(400)
+  interactive = params[:interactive]     || halt(400)
+  description = params[:description]
+
+  api = settings.api
+  response = RestClient.post "#{api[:prefix]}/#{api[:version]}/turnInAssignment", {
+    :api_key => api[:key],
+    :user_token => user_token,
+    :assignment_id => assignment_id,
+    :content => description,
+    :attachments => [app_link(interactive)].to_json
+  }
 
   redirect to("/app?interactive=#{interactive}")
 end
@@ -124,6 +133,16 @@ helpers do
     response = RestClient.get "#{api[:prefix]}/#{api[:version]}/assignmentsComingDue",
       {:params => {:api_key => api[:key], :user_token => user_token}}
     JSON.parse response, :symbolize_names => true
+  end
+
+  def app_link(interactive)
+    {
+      :type => 'link',
+      :title => interactive,
+      :url => "app://?interactive=#{interactive}",
+      :description => 'Next Gen MW Interactive',
+      :thumb_url => 'http://ccedmodo.herokuapp.com/logo.png'
+    }
   end
 
 end

@@ -50,8 +50,13 @@
 
 %br
 
-My Assignments
-%select#select-assignment
-  - assignments.each do |assignment|
-    %option{:value => assignment[:assignment_id]} #{assignment[:assignment_title]}
+%form(action="app/assignment" method="post")
+  %p Why did you select this interactive?
+  %textarea(rows="5" cols="80" name="description")
+  %br
+  %select(name="assignment_id")
+    - assignments.each do |assignment|
+      %option{:value => assignment[:assignment_id]} #{assignment[:assignment_title]}
+  %input(type="hidden" name="interactive" value="")
+  %input(type="submit" value="Submit answer as assignment")
 
