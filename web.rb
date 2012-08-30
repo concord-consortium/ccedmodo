@@ -1,16 +1,12 @@
 require 'sinatra'
 require 'json'
 require 'rest_client'
-require 'logger'
 
 set :api, {
   :prefix => "https://appsapi.edmodobox.com",
   :version => "v1",
   :key => "***REMOVED***"
 }
-
-# log what RestClient does
-RestClient.log = Logger.new(STDOUT)
 
 get '/' do
   "Hello, world"
@@ -46,9 +42,14 @@ helpers do
     api = settings.api
 
     begin
+      logger.info "about to GET the launchRequests resource"
+      # not sure how to get access to the logger outside of request scope
+      RestClient.log = logger
       response = RestClient.get "#{api[:prefix]}/#{api[:version]}/launchRequests", 
         {:params => {:api_key => api[:key], :launch_key => launch_key}}
     rescue => e
+      logger.info "error response: "
+      logger.info e.response
       return false
     end
 
