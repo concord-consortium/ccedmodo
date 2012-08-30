@@ -49,7 +49,9 @@ end
 
 
 get '/app', :authorized => false do
-  haml :index, :locals => { :name => "Bogus unauthorized User", :interactive => 'interactives/add-random-atoms.json' }
+  interactive = params[:interactive] || 'interactives/add-random-atoms.json'
+  logger.info "Rendering index page for interactive #{interactive}"
+  haml :index, :locals => { :name => "Bogus unauthorized User", :interactive => interactive }
 end
 
 
