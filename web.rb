@@ -52,6 +52,7 @@ end
 
 
 post '/app/library' do
+  api = settings.api
   interactive = params[:interactive] || halt(400)
   resource = {
     :type => 'link',
