@@ -6,5 +6,7 @@ $(document).ready(function() {
 
     $('#interactive-iframe').attr('src', 'http://lab.dev.concord.org/examples/interactives/embeddable.html#'+interactive);
     $('input[name="interactive"]').val(interactive);
-  }).trigger('change');
+  });
+
+  $('#select-interactive').val(initialInteractive).trigger('change');
 });

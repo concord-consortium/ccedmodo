@@ -42,12 +42,29 @@ end
 
 
 get '/app', :authorized => true do
-  haml :index, :locals => { :name => user_name }
+  haml :index, :locals => { :name => user_name, :interactive => params[:interactive] || '' }
 end
 
 
 get '/app', :authorized => false do
-  haml :index, :locals => { :name => "Bogus unauthorized User" }
+  haml :index, :locals => { :name => "Bogus unauthorized User", :interactive => 'interactives/add-random-atoms.json' }
+end
+
+
+post '/app/library', :authorized => true do
+  interactive = params[:interactive] || halt(400)
+  resource = {
+    :type => 'link',
+    :title => interactive,
+    :url => "app://?interactive=#{interactive}",
+    :description => 'Next Gen MW Interactive',
+    :thumb_url => 'http://ccedmodo.herokuapp.com/logo.png'
+  }.to_json
+
+  response = RestClient.post "#{api[:prefix]}/#{api[:version]}/addToLibrary",
+    {:params => {:api_key => api[:key], :user_token => user_token, :resource => resource}}
+
+  redirect to('/app')
 end
 
 
@@ -78,6 +95,10 @@ helpers do
   def user_name
     launch_info = session[:launch_info]
     launch_info[:first_name] + " " + launch_info[:last_name]
+  end
+
+  def user_token
+    session[:launch_info][:user_token]
   end
 
 end
