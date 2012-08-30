@@ -1,5 +1,46 @@
 !!! 5
+%meta(content="text/html;charset=utf-8" http-equiv="Content-Type")/
+%script(type="text/javascript" src="js/jquery-1.8.0.min.js")
+%script(type="text/javascript" src="js/app.js")
 
 %body
   %h1 Hello
   %p= "Hello, authorized user #{name}!"
+
+  Select an interactive
+  %select#select-interactive
+    %optgroup{:label => "Basic Interactive Examples"}
+      %option{:value => "interactives/add-atoms.json"} add atoms
+      %option{:value => "interactives/add-random-atoms.json"} add random atoms
+      %option{:value => "interactives/layout-example.json"} layout example
+      %option{:value => "interactives/script-examples.json"} script examples
+    %optgroup{:label => "Science of Atoms and Molecules: Intermolecular Attractions"}
+      %option{:value => "interactives/oil-and-water-shake.json", :selected => true} Oil and Water
+      %option{:value => "interactives/intermolecular-attractions-page-1.json"} Page 1
+      %option{:value => "interactives/intermolecular-attractions-page-2.json"} Page 2
+      %option{:value => "interactives/boiling-point.json"} Boiling Point and Solubility
+      %option{:value => "interactives/leastPolarPull.json"} Page 4: Least Polar
+      %option{:value => "interactives/npCurvedRound.json"} Page 5: Curved Round
+      %option{:value => "interactives/npSmallStraight.json"} Page 5: Small Straight
+    %optgroup{:label => "Science of Atoms and Molecules: Gas Laws"}
+      %option{:value => "interactives/gas-laws-page-2.json"} Gas Laws Page 2 example
+      %option{:value => "interactives/gas-laws-page-4.json"} Gas Laws Page 4 example
+    %optgroup{:label => "VISUAL Recycling Project"}
+      %option{:value => "interactives/recycling-ceramicforces.json"} Recycling: Ceramic Forces
+      %option{:value => "interactives/recycling-plasticforces.json"} Recycling: Plastic Forces
+      %option{:value => "interactives/recycling-metalforces.json"} Recycling: Metal Forces
+      %option{:value => "interactives/recycling-tireforces.json"} Recycling: Tire Forces
+    %optgroup{:label => "Conversion Tests"}
+      %option{:value => "interactives/one-radial-bond.json"} One Radial Bond
+      %option{:value => "interactives/one-radial-bond-different-elements.json"} One Radial Bond, Different Elements
+      %option{:value => "interactives/force-lines-short.json"} Force Lines Short
+      %option{:value => "interactives/force-lines-medium.json"} Force Lines Medium
+      %option{:value => "interactives/force-lines-long.json"} Force Lines Long
+      %option{:value => "interactives/coulomb-testing-forces.json"} Coulomb Forces
+
+%br
+
+%iframe#interactive-iframe(width="600px" height="500px")
+%form(action="app/library" method="post")
+  %input(type="hidden" name="interactive" value="")
+  %input(type="submit" value="Save To Library")
