@@ -65,7 +65,15 @@ post '/app/library' do
   response = RestClient.post "#{api[:prefix]}/#{api[:version]}/addToLibrary",
     {:api_key => api[:key], :user_token => user_token, :resource => app_link(interactive).to_json}
 
-  redirect to("/app?interactive=#{interactive}")
+  redirect to("/app/library/confirm?interactive=#{interactive}")
+end
+
+
+get '/app/library/confirm' do
+  haml :confirm, :locals => {
+    :message => "The model was saved to your library.",
+    :return_href => app_href(params[:interactive])
+  }
 end
 
 
@@ -83,7 +91,15 @@ post '/app/assignment' do
     :attachments => [app_link(interactive)].to_json
   }
 
-  redirect to("/app?interactive=#{interactive}")
+  redirect to("/app/assignment/confirm?interactive=#{interactive}")
+end
+
+
+get '/app/assignment/confirm' do
+  haml :confirm, :locals => {
+    :message => "Your answer to the assignment was turned in.",
+    :return_href => app_href(params[:interactive])
+  }
 end
 
 
@@ -147,6 +163,10 @@ helpers do
       :description => 'Next Gen MW Interactive',
       :thumb_url => 'http://ccedmodo.herokuapp.com/logo.png'
     }
+  end
+
+  def app_href(interactive)
+    url "/app?interactive=#{interactive}"
   end
 
 end
