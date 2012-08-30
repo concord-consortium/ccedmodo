@@ -1,12 +1,16 @@
 require 'sinatra'
 require 'json'
 require 'rest_client'
+require 'logger'
 
 set :api, {
   :prefix => "https://appsapi.edmodobox.com/",
   :version => "v1",
   :key => "***REMOVED***"
 }
+
+# log what RestClient does
+RestClient.log = Logger.new(STDOUT)
 
 get '/' do
   "Hello, world"
@@ -40,7 +44,6 @@ end
 helpers do
   def launch_key_valid?(launch_key)
     api = settings.api
-    logger.info "using api: #{api[:prefix]}"
 
     begin
       response = RestClient.get "#{api[:prefix]}/#{api[:version]}/launchRequests", 
