@@ -33,6 +33,11 @@ end
 
 post '/app' do
   check_launch_request params[:launch_key]
+  call env.merge('REQUEST_METHOD' => 'GET')
+end
+
+
+get '/app' do
   if session[:authorized]
     haml :index
   else
