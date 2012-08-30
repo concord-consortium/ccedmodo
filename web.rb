@@ -51,7 +51,7 @@ get '/app', :authorized => false do
 end
 
 
-post '/app/library', :authorized => true do
+post '/app/library' do
   interactive = params[:interactive] || halt(400)
   resource = {
     :type => 'link',
