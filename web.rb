@@ -12,7 +12,9 @@ set :api, {
 }
 
 # We very much need NOT to send X-Frame-Options: sameorigin (the Sinatra default)
-set :protection, :except => :frame_options
+# Also see https://groups.google.com/forum/#!topic/rack-devel/se6HN2yL1VE ("attack prevented" was
+# showing up in the logs.)
+set :protection, :except => [:remote_token, :frame_options]
 
 # this is a Sinatra route condition
 set(:authorized) { |value| condition { (session[:authorized] || false) == value } }
