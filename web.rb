@@ -8,6 +8,9 @@ set :api, {
   :key => "***REMOVED***"
 }
 
+# We very much need NOT to send X-Frame-Options: sameorigin (the Sinatra default)
+set :protection, :except => :frame_options
+
 get '/' do
   "Hello, world"
 end
