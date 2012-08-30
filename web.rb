@@ -135,6 +135,10 @@ helpers do
     JSON.parse response, :symbolize_names => true
   end
 
+  # This returns the json description of an edmodo "app link" which, when saved to a user's library,
+  # or added as an attachment to a post or assignment, tells edmodo to launch this app with the
+  # query parameters we specify below. (in this case, the query paramter opens the interactive
+  # specified by the argument 'interactive'.
   def app_link(interactive)
     {
       :type => 'link',
