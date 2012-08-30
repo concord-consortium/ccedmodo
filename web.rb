@@ -3,6 +3,8 @@ require 'json'
 require 'rest_client'
 require 'haml'
 
+enable :sessions
+
 set :api, {
   :prefix => "https://appsapi.edmodobox.com",
   :version => "v1",
