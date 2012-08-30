@@ -47,7 +47,7 @@ end
 
 
 get '/app', :authorized => false do
-  halt 401, 'You are not authorized.'
+  haml :index, :locals => { :name => "Bogus unauthorized User" }
 end
 
 
