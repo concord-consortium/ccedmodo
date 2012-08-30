@@ -54,6 +54,8 @@ end
 post '/app/library' do
   api = settings.api
   interactive = params[:interactive] || halt(400)
+
+  logger.info "Authorized? #{session[:authorized]}"
   resource = {
     :type => 'link',
     :title => interactive,
@@ -62,6 +64,7 @@ post '/app/library' do
     :thumb_url => 'http://ccedmodo.herokuapp.com/logo.png'
   }.to_json
 
+  RestClient.log = logger
   response = RestClient.post "#{api[:prefix]}/#{api[:version]}/addToLibrary",
     {:params => {:api_key => api[:key], :user_token => user_token, :resource => resource}}
 
