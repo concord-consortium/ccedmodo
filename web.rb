@@ -32,8 +32,8 @@ end
 
 
 post '/app' do
-  launch_key = params[:launch_key]
-  if launch_key_valid?(launch_key)
+  check_launch_request params[:launch_key]
+  if session[:authorized]
     haml :index
   else
     halt 401, 'You are not authorized.'
@@ -42,7 +42,8 @@ end
 
 
 helpers do
-  def launch_key_valid?(launch_key)
+
+  def check_launch_request(launch_key)
     api = settings.api
 
     begin
@@ -54,11 +55,13 @@ helpers do
     rescue => e
       logger.info "error response: "
       logger.info e.response
-      return false
+      session[:authorized] = false
+      return
     end
 
     logger.info "launch request response:"
     logger.info response.to_str
-    response.code == 200
+    session[:authorized] = true
+    session[:launch_info] = JSON.parse response, :symbolize_names => true
   end
 end
