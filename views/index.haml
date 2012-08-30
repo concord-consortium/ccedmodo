@@ -47,3 +47,11 @@
 %form(action="app/library" method="post")
   %input(type="hidden" name="interactive" value="")
   %input(type="submit" value="Save To Library")
+
+%br
+
+My Assignments
+%select#select-assignment
+  - assignments.each do |assignment|
+    %option{:value => assignment[:assignment_id]} #{assignment[:assignment_title]}
+

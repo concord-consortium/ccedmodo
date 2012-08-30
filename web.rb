@@ -46,14 +46,14 @@ end
 
 
 get '/app', :authorized => true do
-  haml :index, :locals => { :name => user_name, :interactive => params[:interactive] || '' }
+  haml :index, :locals => { :name => user_name, :interactive => params[:interactive] || '', :assignments => assignments }
 end
 
 
 get '/app', :authorized => false do
   interactive = params[:interactive] || 'interactives/add-random-atoms.json'
   logger.info "Rendering index page for interactive #{interactive}"
-  haml :index, :locals => { :name => "Bogus unauthorized User", :interactive => interactive }
+  haml :index, :locals => { :name => "Bogus unauthorized User", :interactive => interactive, :assignments => assignments }
 end
 
 
@@ -102,13 +102,28 @@ helpers do
     session[:launch_info] = JSON.parse response, :symbolize_names => true
   end
 
+  def launch_info
+    session[:launch_info]
+  end
+
   def user_name
-    launch_info = session[:launch_info]
     launch_info[:first_name] + " " + launch_info[:last_name]
   end
 
   def user_token
-    session[:launch_info][:user_token]
+    launch_info[:user_token]
+  end
+
+  def student?
+    launch_info && launch_info[:user_type] == 'STUDENT'
+  end
+
+  def assignments
+    return [] if !student?
+    api = settings.api
+    response = RestClient.get "#{api[:prefix]}/#{api[:version]}/assignmentsComingDue",
+      {:params => {:api_key => api[:key], :user_token => user_token}}
+    JSON.parse response, :symbolize_names => true
   end
 
 end
