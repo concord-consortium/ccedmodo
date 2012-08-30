@@ -12,9 +12,13 @@ set :api, {
 # We very much need NOT to send X-Frame-Options: sameorigin (the Sinatra default)
 set :protection, :except => :frame_options
 
+# this is a Sinatra route condition
+set(:authorized) { |value| condition { (session[:authorized] || false) == value } }
+
 get '/' do
   "Hello, world"
 end
+
 
 post '/install' do
   install = JSON.parse params[:install], :symbolize_names => true
@@ -37,12 +41,13 @@ post '/app' do
 end
 
 
-get '/app' do
-  if session[:authorized]
-    haml :index, :locals => { :name => user_name }
-  else
-    halt 401, 'You are not authorized.'
-  end
+get '/app', :authorized => true do
+  haml :index, :locals => { :name => user_name }
+end
+
+
+get '/app', :authorized => false do
+  halt 401, 'You are not authorized.'
 end
 
 
