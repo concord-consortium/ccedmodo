@@ -39,7 +39,7 @@ end
 
 get '/app' do
   if session[:authorized]
-    haml :index
+    haml :index, :locals => { :name => user_name }
   else
     halt 401, 'You are not authorized.'
   end
@@ -69,4 +69,10 @@ helpers do
     session[:authorized] = true
     session[:launch_info] = JSON.parse response, :symbolize_names => true
   end
+
+  def user_name 
+    launch_info = session[:launch_info]
+    launch_info[:first_name] + " " + launch_info[:last_name]
+  end
+
 end
