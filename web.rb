@@ -8,7 +8,7 @@ enable :sessions
 set :api, {
   :prefix => "https://appsapi.edmodobox.com",
   :version => "v1",
-  :key => "***REMOVED***"
+  :key => ENV['EDMODO_API_KEY']
 }
 
 # We very much need NOT to send X-Frame-Options: sameorigin (the Sinatra default)
